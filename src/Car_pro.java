@@ -4,7 +4,7 @@ import java.util.Properties;
 
 public class Car_pro {
 
-	public static void main(String[] args) throws SQLException  {
+	public static void main(String[] args) throws SQLException {
 
 		try {
 			// Class.forName("org.apache.derby.jdbc.ClientDriver");
@@ -76,8 +76,22 @@ public class Car_pro {
 					break;
 
 				case 'L':
-					rs = myStmt.executeQuery("SELECT * FROM car_deal");
-					System.out.println("make  model	year	salesprice");
+
+					sql = "SELECT * FROM car_deal ";
+					myStmt = myConn.prepareStatement(sql);
+					rs = myStmt.executeQuery();
+					if (rs.next() == false) {
+						System.out.println("Dtata is not there");
+					} else {
+						make = rs.getString("make");
+						model = rs.getString("model");
+						year = rs.getInt("year");
+						salesprice = rs.getInt("salesprice");
+						
+						System.out.println("make  model	year	salesprice");
+						System.out.println(make + "   " + model + "    " + year + "	" + salesprice);
+
+					}
 					while (rs.next()) {
 						make = rs.getString("make");
 						model = rs.getString("model");
@@ -85,15 +99,14 @@ public class Car_pro {
 						salesprice = rs.getInt("salesprice");
 						System.out.println(make + "   " + model + "    " + year + "	" + salesprice);
 					}
-					System.out.println("Listed add details");
 					break;
 
 				case 'D':
 					System.out.println("enter the make field which you want to del::");
 					String makedel = input.next();
-					sql = "delete from car_deal where make =  ? " ;	
+					sql = "delete from car_deal where make =  ? ";
 					myStmt = myConn.prepareStatement(sql);
-					myStmt.setString(1,makedel);
+					myStmt.setString(1, makedel);
 					myStmt.executeUpdate();
 					System.out.println("Delete Done check the table ");
 					break;
@@ -110,9 +123,9 @@ public class Car_pro {
 			System.out.println("SQL exception occured" + e);
 		} finally {
 
-			myStmt.close();
+			 myStmt.close();
 			myConn.close();
-			
+
 		}
 	}
 
